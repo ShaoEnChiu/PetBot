@@ -37,6 +37,8 @@ class MessageType(Enum):
 	location = 6
 	sticker = 7
 
+channeltoken='qYzIzIqCTWz82oZkTnO0A9Ggiz6bNkS1VHIMU/9kCww/M709Ff+PFDObSL+OFvhSQlLpYlTDmxkKgKS2SwbkoZs/tLEgzLlJYY+Wsf1yB6J//rQfZOuv9dLeCpt2fcBg984pT1wLpBT0uNEcmBuAaQdB04t89/1O/w1cDnyilFU='
+
 app = Flask(__name__)
 
 # 測試app.py有沒有Deploy成功
@@ -60,6 +62,7 @@ def callback():
 				replyapi(token, json.dumps(temp))
 			elif MessageType.image.name in i['message']['type']:
 				replyapi(token, json.dumps(temp))
+				replyImageapi(token, i['message']['id'])
 			elif MessageType.video.name in i['message']['type']:
 				replyapi(token, json.dumps(temp))
 			elif MessageType.audio.name in i['message']['type']:
@@ -124,9 +127,21 @@ def genHeaders(channeltoken):
 	}
 	return ret
 
-def replyapi(accesstoken, msg):
-	channeltoken='qYzIzIqCTWz82oZkTnO0A9Ggiz6bNkS1VHIMU/9kCww/M709Ff+PFDObSL+OFvhSQlLpYlTDmxkKgKS2SwbkoZs/tLEgzLlJYY+Wsf1yB6J//rQfZOuv9dLeCpt2fcBg984pT1wLpBT0uNEcmBuAaQdB04t89/1O/w1cDnyilFU='
+def replyImageapi(accesstoken, messageID):
+	headers = genHeaders(channeltoken)
 
+	img_data = [];
+	res = requests.get('https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content', headers = headers)
+	img_data.append({'type':'text', 'text':res.text})
+	data = {
+		'replyToken':accesstoken,
+		'messages':img_data
+	}
+
+	datajson = json.dumps(data)
+	res = requests.post('https://api.line.me/v2/bot/message/reply', headers = headers, data = datajson)
+
+def replyapi(accesstoken, msg):
 	# 利用Line SDK的方式，做reply的作業。
 	"""
 	line_bot_api = LineBotApi(channeltoken)
