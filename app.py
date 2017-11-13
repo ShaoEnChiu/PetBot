@@ -56,19 +56,19 @@ def callback():
 		# content_type = getContent_type(i['message']['type'])
 
 		if EventType.message.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.follow.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.unfollow.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.join.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.leave.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.postback.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 		elif EventType.beacon.name in i['type']:
-			replyapi(token, temp)
+			replyapi(token, json.dumps(temp))
 
 		'''
 		if i['message']['type']=='text':
