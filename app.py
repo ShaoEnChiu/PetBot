@@ -18,7 +18,7 @@ app = Flask(__name__)
 # 測試app.py有沒有Deploy成功
 @app.route("/", methods=["GET"])
 def index():
-	return "hello world 8 >>> index", 200
+	return "hello world 9 >>> index", 200
 
 # 在Line的Document當中有寫到，webhook URL會透過post request呼叫 https://{urladdress}/callback
 @app.route("/callback", methods=["POST"])
@@ -41,7 +41,7 @@ def processMessage(msg):
 		ret.append('http://i.imgur.com/xjTET8v.jpg')
 		ret.append('可以退下了')
 	else:
-		ret.append('慢走不送')
+		ret.append('https://sdl-stickershop.line.naver.jp/stickershop/v1/product/1179553/iphone/main@2x.png')
 	return ret
 
 def genData(accesstoken, msgs):
