@@ -95,8 +95,7 @@ def processMessage(msg):
 	pat = re.compile(r".*(掰掰).*")
 	mat = pat.findall(msg)
 	if len(mat) == 0:
-		ret.append('朕知道了')
-		ret.append('可以退下了')
+		ret.append(msg)
 	else:
 		ret.append('慢走不送')
 	return ret
