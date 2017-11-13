@@ -61,7 +61,6 @@ def callback():
 			if MessageType.text.name in i['message']['type']:
 				replyapi(token, json.dumps(temp))
 			elif MessageType.image.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
 				replyImageapi(token, i['message']['id'])
 			elif MessageType.video.name in i['message']['type']:
 				replyapi(token, json.dumps(temp))
@@ -132,7 +131,7 @@ def replyImageapi(accesstoken, messageID):
 
 	img_data = [];
 	res = requests.get('https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content', headers = headers)
-	img_data.append({'type':'text', 'text':res.text})
+	img_data.append({'type':'text', 'text':'https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content'})
 	data = {
 		'replyToken':accesstoken,
 		'messages':img_data
