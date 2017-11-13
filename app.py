@@ -13,39 +13,82 @@ requests.packages.urllib3.disable_warnings()
 # from linebot import LineBotApi
 # from linebot.models import TextSendMessage
 
+# Enum 透過 name 跟 value 屬性讀取
+class EventType(Enum):
+	message = 1
+	follow = 2
+	unfollow = 3
+	join = 4
+	leave = 5
+	postback = 6
+	beacon = 7
+
+class SourceType(Enum):
+	user = 1
+	group = 2
+	room = 3
+
+class MessageType(Enum):
+	text = 1
+	image = 2
+	video = 3
+	audio = 4
+	file = 5
+	location = 6
+	sticker = 7
+
 app = Flask(__name__)
 
 # 測試app.py有沒有Deploy成功
 @app.route("/", methods=["GET"])
 def index():
-	return "hello world 10 >>> index", 200
+	return "hello world >>> index", 200
 
 # 在Line的Document當中有寫到，webhook URL會透過post request呼叫 https://{urladdress}/callback
 @app.route("/callback", methods=["POST"])
 def callback():
 	temp = request.get_json()
 	for i in temp['events']:
-		ttt = i['replyToken']
-		print i['source']['userId']
-		
-		#get contentType
-		#content_type = getContent_type(i['message']['type'])
-		
+		token = i['replyToken']
+		# print i['source']['userId']
+
+		# get contentType
+		# content_type = getContent_type(i['message']['type'])
+
+		if EventType.message.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.follow.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.unfollow.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.join.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.leave.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.postback.name in i['type']:
+			replyapi(token, temp)
+		elif EventType.beacon.name in i['type']:
+			replyapi(token, temp)
+
+		'''
 		if i['message']['type']=='text':
 			msg = i['message']['text']
-		replyapi(ttt, msg)
+		replyapi(token, msg)
+		'''
+
 	return "hello world >>> callback", 200
 
 def getContent_type(content_type):
 	switcher = {
-        0: "text",
-        1: "Image",
-        2: "video",
-	3: "audio",
-	4: "location",
-	5: "sticker"	 
-    }
-	return switcher.get(content_type, "nothing")	
+		0:"text",
+		1:"Image",
+		2:"video",
+		3:"audio",
+		4:"location",
+		5:"sticker"
+	}
+	return switcher.get(content_type, "nothing")
+
 def processMessage(msg):
 	ret = []
 	mat = []
