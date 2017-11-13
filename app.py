@@ -44,7 +44,7 @@ app = Flask(__name__)
 # 測試app.py有沒有Deploy成功
 @app.route("/", methods=["GET"])
 def index():
-	return "hello world >>> index", 200
+	return "hello world 1>>> index", 200
 
 # 在Line的Document當中有寫到，webhook URL會透過post request呼叫 https://{urladdress}/callback
 @app.route("/callback", methods=["POST"])
@@ -131,7 +131,7 @@ def replyImageapi(accesstoken, messageID):
 
 	img_data = [];
 	res = requests.get('https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content', headers = headers)
-	img_data.append({'type':'text', 'text':'https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content'})
+	img_data.append({'type':'text', 'text':'yoyoyo'})
 	data = {
 		'replyToken':accesstoken,
 		'messages':img_data
