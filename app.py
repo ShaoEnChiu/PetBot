@@ -27,11 +27,25 @@ def callback():
 	for i in temp['events']:
 		ttt = i['replyToken']
 		print i['source']['userId']
+		
+		#get contentType
+		#content_type = getContent_type(i['message']['type'])
+		
 		if i['message']['type']=='text':
 			msg = i['message']['text']
 		replyapi(ttt, msg)
 	return "hello world >>> callback", 200
 
+def getContent_type(content_type):
+	switcher = {
+        0: "text",
+        1: "Image",
+        2: "video",
+	3: "audio",
+	4: "location",
+	5: "sticker"	 
+    }
+	return switcher.get(content_type, "nothing")	
 def processMessage(msg):
 	ret = []
 	mat = []
