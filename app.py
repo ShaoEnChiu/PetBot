@@ -56,7 +56,20 @@ def callback():
 		# content_type = getContent_type(i['message']['type'])
 
 		if EventType.message.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			if MessageType.text.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.image.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.video.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.audio.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.file.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.location.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
+			elif MessageType.sticker.name in i['message']['type']:
+				replyapi(token, json.dumps(temp))
 		elif EventType.follow.name in i['type']:
 			replyapi(token, json.dumps(temp))
 		elif EventType.unfollow.name in i['type']:
@@ -69,12 +82,6 @@ def callback():
 			replyapi(token, json.dumps(temp))
 		elif EventType.beacon.name in i['type']:
 			replyapi(token, json.dumps(temp))
-
-		'''
-		if i['message']['type']=='text':
-			msg = i['message']['text']
-		replyapi(token, msg)
-		'''
 
 	return "hello world >>> callback", 200
 
@@ -105,8 +112,8 @@ def genData(accesstoken, msgs):
 	for msg in msgs:
 		data.append({'type':'text', 'text':msg})
 	ret = {
-	'replyToken':accesstoken,
-	'messages':data
+		'replyToken':accesstoken,
+		'messages':data
 	}
 	return ret
 
@@ -131,14 +138,10 @@ def replyapi(accesstoken, msg):
 		# error handle
 	"""
 
-	t = msg.encode('utf-8')
-	data = {}
-	data = genData(accesstoken, processMessage(t))
-
-	headers = genHeaders(channeltoken)
-
-	urladdress = 'https://api.line.me/v2/bot/message/reply'
+	data = genData(accesstoken, processMessage(msg.encode('utf-8')))
 	datajson = json.dumps(data)
+	headers = genHeaders(channeltoken)
+	urladdress = 'https://api.line.me/v2/bot/message/reply'
 	# 依照Line Document當中的定義，準備好headers和data(json格式)。
 	res = requests.post(urladdress, headers = headers, data = datajson)
 
