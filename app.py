@@ -18,7 +18,7 @@ app = Flask(__name__)
 # 測試app.py有沒有Deploy成功
 @app.route("/", methods=["GET"])
 def index():
-	return "hello world >>> index", 200
+	return "hello world 1 >>> index", 200
 
 # 在Line的Document當中有寫到，webhook URL會透過post request呼叫 https://{urladdress}/callback
 @app.route("/callback", methods=["POST"])
@@ -86,5 +86,5 @@ def replyapi(accesstoken, msg):
 	# 依照Line Document當中的定義，準備好headers和data(json格式)。
 	res = requests.post(urladdress, headers = headers, data = datajson)
 
-if __name__=='__main__':
+if __name__== '__main__':
 	app.run()
