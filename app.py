@@ -132,8 +132,7 @@ def replyMessageImageApi(accesstoken, json_data, messageID):
 	url = ''.join(['https://api.line.me/v2/bot/message/', messageID.encode('utf-8'), '/content'])
 	img_data = [];
 	res = requests.get(url, headers = headers)
-	img_data.append({'type':'text', 'text':url})
-	#img_data.append({'type':'text', 'text':res.text})
+	img_data.append({'type':'text', 'text':res.text})
 	data = {
 		'replyToken':accesstoken,
 		'messages':img_data
