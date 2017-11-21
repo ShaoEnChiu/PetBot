@@ -147,7 +147,7 @@ def getPetStatusMsg(accesstoken, json_data):
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
 	res = requests.get(url, headers = headers)
-	return ''.join(['心跳：', json.loads(res.text)['value'][0]])
+	return ''.join(['心跳：', json.loads(res.text)['value'][0].encode('utf-8')])
 
 def replyMessageTextApi(accesstoken, json_data, msg):
 	ret = '我不太清楚~'
