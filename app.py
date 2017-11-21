@@ -49,8 +49,8 @@ def index():
 # 在Line的Document當中有寫到，webhook URL會透過post request呼叫 https://{urladdress}/callback
 @app.route("/callback", methods=["POST"])
 def callback():
-	temp = request.get_json()
-	for i in temp['events']:
+	json_data = request.get_json()
+	for i in json_data['events']:
 		token = i['replyToken']
 		# print i['source']['userId']
 
@@ -59,31 +59,31 @@ def callback():
 
 		if EventType.message.name in i['type']:
 			if MessageType.text.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyMessageTextApi(token, json_data, i['message']['text'])
 			elif MessageType.image.name in i['message']['type']:
-				replyImageapi(token, i['message']['id'])
+				replyMessageImageApi(token, i['message']['id'])
 			elif MessageType.video.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyapi(token, json_data)
 			elif MessageType.audio.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyapi(token, json_data)
 			elif MessageType.file.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyapi(token, json_data)
 			elif MessageType.location.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyapi(token, json_data)
 			elif MessageType.sticker.name in i['message']['type']:
-				replyapi(token, json.dumps(temp))
+				replyapi(token, json_data)
 		elif EventType.follow.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 		elif EventType.unfollow.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 		elif EventType.join.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 		elif EventType.leave.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 		elif EventType.postback.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 		elif EventType.beacon.name in i['type']:
-			replyapi(token, json.dumps(temp))
+			replyapi(token, json_data)
 
 	return "hello world >>> callback", 200
 
@@ -126,7 +126,7 @@ def genHeaders(channeltoken):
 	}
 	return ret
 
-def replyImageapi(accesstoken, messageID):
+def replyMessageImageApi(accesstoken, messageID):
 	headers = genHeaders(channeltoken)
 
 	img_data = [];
@@ -140,7 +140,28 @@ def replyImageapi(accesstoken, messageID):
 	datajson = json.dumps(data)
 	res = requests.post('https://api.line.me/v2/bot/message/reply', headers = headers, data = datajson)
 
-def replyapi(accesstoken, msg):
+def getPetStatusMsg(accesstoken, json_data):
+	url = 'http://iot.cht.com.tw/iot/v1/device/4837051040/sensor/Sensor01/rawdata'
+	headers = {
+		'Content-Type':'application/json',
+		'CK':'PKM0B5MS0SZFYE5E2M'
+	}
+	res = requests.get(url, headers = headers)
+	return res.text
+
+def replyMessageTextApi(accesstoken, json_data, msg):
+	msg = '我不太清楚~'.encode('utf-8')
+	if '寵物身體狀況' in msg:
+		msg = getPetStatusMsg(accesstoken, json_data)
+
+	data = genData(accesstoken, [msg])
+	datajson = json.dumps(data)
+	headers = genHeaders(channeltoken)
+	urladdress = 'https://api.line.me/v2/bot/message/reply'
+	# 依照Line Document當中的定義，準備好headers和data(json格式)。
+	res = requests.post(urladdress, headers = headers, data = datajson)
+
+def replyapi(accesstoken, json_data):
 	# 利用Line SDK的方式，做reply的作業。
 	"""
 	line_bot_api = LineBotApi(channeltoken)
@@ -152,7 +173,7 @@ def replyapi(accesstoken, msg):
 		# error handle
 	"""
 
-	data = genData(accesstoken, processMessage(msg.encode('utf-8')))
+	data = genData(accesstoken, [json.dumps(json_data).encode('utf-8')])
 	datajson = json.dumps(data)
 	headers = genHeaders(channeltoken)
 	urladdress = 'https://api.line.me/v2/bot/message/reply'
