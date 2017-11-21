@@ -147,7 +147,7 @@ def getPetStatusMsg(accesstoken, json_data):
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
 	res = requests.get(url, headers = headers)
-	ret = ''.join(['心跳：', json.loads(res.text)['value'][0].encode('utf-8')])
+	ret = ''.join(['心跳：', json.loads(res.text)['value'][0].encode('utf-8'), '\n'])
 
 	url = 'http://iot.cht.com.tw/iot/v1/device/4837051040/sensor/Sensor02/rawdata'
 	headers = {
@@ -163,7 +163,7 @@ def getPetStatusMsg(accesstoken, json_data):
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
 	res = requests.get(url, headers = headers)
-	ret = ''.join([ret, '溫度：', json.loads(res.text)['value'][0].encode('utf-8'), '\n'])
+	ret = ''.join([ret, '溫度：', json.loads(res.text)['value'][0].encode('utf-8')])
 
 	return ret
 
