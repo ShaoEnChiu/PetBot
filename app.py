@@ -147,11 +147,11 @@ def getPetStatusMsg(accesstoken, json_data):
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
 	res = requests.get(url, headers = headers)
-	return res.text
+	return res.text.encode('utf-8')
 
 def replyMessageTextApi(accesstoken, json_data, msg):
-	msg = '我不太清楚~'.encode('utf-8')
-	if '寵物身體狀況' in msg:
+	ret = '我不太清楚~'
+	if '寵物身體狀況' in msg.encode('utf-8'):
 		msg = getPetStatusMsg(accesstoken, json_data)
 
 	data = genData(accesstoken, [msg])
