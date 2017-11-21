@@ -147,14 +147,14 @@ def getPetStatusMsg(accesstoken, json_data):
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
 	res = requests.get(url, headers = headers)
-	return res.text.encode('utf-8')
+	return ''.join('心跳：', res['value'].text.encode('utf-8'))
 
 def replyMessageTextApi(accesstoken, json_data, msg):
 	ret = '我不太清楚~'
 	if '寵物身體狀況' in msg.encode('utf-8'):
-		msg = getPetStatusMsg(accesstoken, json_data)
+		ret = getPetStatusMsg(accesstoken, json_data)
 
-	data = genData(accesstoken, [msg])
+	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
 	headers = genHeaders(channeltoken)
 	urladdress = 'https://api.line.me/v2/bot/message/reply'
