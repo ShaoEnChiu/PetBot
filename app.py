@@ -61,7 +61,7 @@ def callback():
 			if MessageType.text.name in i['message']['type']:
 				replyMessageTextApi(token, json_data, i['message']['text'])
 			elif MessageType.image.name in i['message']['type']:
-				replyMessageImageApi(token, i['message']['id'])
+				replyMessageImageApi(token, json_data, i['message']['id'])
 			elif MessageType.video.name in i['message']['type']:
 				replyapi(token, json_data)
 			elif MessageType.audio.name in i['message']['type']:
@@ -126,11 +126,13 @@ def genHeaders(channeltoken):
 	}
 	return ret
 
-def replyMessageImageApi(accesstoken, messageID):
+def replyMessageImageApi(accesstoken, json_data, messageID):
 	headers = genHeaders(channeltoken)
 
+	url = 'https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content'
 	img_data = [];
-	res = requests.get('https://api.line.me/v2/bot/message/' + messageID.encode('utf-8') + '/content', headers = headers)
+	res = requests.get(url, headers = headers)
+	img_data.append({'type':'text', 'text':url})
 	img_data.append({'type':'text', 'text':res.text})
 	data = {
 		'replyToken':accesstoken,
