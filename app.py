@@ -237,17 +237,17 @@ def replyMessageTextApi(accesstoken, json_data, msg):
 	if '寵物身體狀況' in msg.encode('utf-8'):
 		ret = getPetStatusMsg(accesstoken, json_data)
 	if '開燈' in msg.encode('utf-8'):
-		ret = LightEventMsg(accesstoken, json_data, 1)
+		ret = LightEventMsg(accesstoken, json_data, ONOFFType.ON.value)
 	if '關燈' in msg.encode('utf-8'):
-		ret = LightEventMsg(accesstoken, json_data, 0)
+		ret = LightEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
 	if '開始餵食' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, 1)
+		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.ON.value)
 	if '結束餵食' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, 0)
+		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
 	if '開冷氣' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, 1)
+		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.ON.value)
 	if '關冷氣' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, 0)
+		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
 
 	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
