@@ -168,10 +168,33 @@ def getPetStatusMsg(accesstoken, json_data):
 
 	return ret
 
+def LightEventMsg(accesstoken, json_data, status):
+	url = 'http://iot.cht.com.tw/iot/v1/device/4847989060/rawdata'
+	headers = {
+		'Content-Type':'application/json',
+		'CK':'PKM0B5MS0SZFYE5E2M'
+	}
+	data = [{
+		'id':'Sensor01',
+		'value':[status]
+	}]
+	res = requests.post(url, headers = headers, data = data)
+	msg = 'OFF'
+	if status == '1':
+		msg = 'ON'
+
+	ret = ''.join(['電燈 => ', msg])
+
+	return ret
+
 def replyMessageTextApi(accesstoken, json_data, msg):
 	ret = '我不太清楚~'
 	if '寵物身體狀況' in msg.encode('utf-8'):
 		ret = getPetStatusMsg(accesstoken, json_data)
+	if '開燈' in msg.encode('utf-8'):
+		ret = LightEventMsg(accesstoken, json_data, '1')
+	if '關燈' in msg.encode('utf-8'):
+		ret = LightEventMsg(accesstoken, json_data, '0')
 
 	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
