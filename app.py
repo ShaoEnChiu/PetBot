@@ -183,7 +183,7 @@ def LightEventMsg(accesstoken, json_data, status):
 	if status == '1':
 		msg = 'ON'
 
-	ret = ''.join(['電燈 => ', msg])
+	ret = ''.join(['電燈 => ', res.text])
 
 	return ret
 
