@@ -212,18 +212,42 @@ def FoodEventMsg(accesstoken, json_data, status):
 
 	return ret
 
+def AirConditionEventMsg(accesstoken, json_data, status):
+	url = 'http://iot.cht.com.tw/iot/v1/device/4848043528/rawdata'
+	headers = {
+		'Content-Type':'application/json',
+		'CK':'PKM0B5MS0SZFYE5E2M'
+	}
+	data = [{
+		'id':'Sensor01',
+		'value':[status]
+	}]
+	datajson = json.dumps(data)
+	res = requests.post(url, headers = headers, data = datajson)
+	msg = ONOFFType.OFF.name
+	if status == ONOFFType.ON.value:
+		msg = ONOFFType.ON.name
+
+	ret = ''.join(['冷氣 => ', msg])
+
+	return ret
+
 def replyMessageTextApi(accesstoken, json_data, msg):
 	ret = '我不太清楚~'
 	if '寵物身體狀況' in msg.encode('utf-8'):
 		ret = getPetStatusMsg(accesstoken, json_data)
 	if '開燈' in msg.encode('utf-8'):
-		ret = LightEventMsg(accesstoken, json_data, '1')
+		ret = LightEventMsg(accesstoken, json_data, 1)
 	if '關燈' in msg.encode('utf-8'):
-		ret = LightEventMsg(accesstoken, json_data, '0')
+		ret = LightEventMsg(accesstoken, json_data, 0)
 	if '開始餵食' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, '1')
+		ret = FoodEventMsg(accesstoken, json_data, 1)
 	if '結束餵食' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, '0')
+		ret = FoodEventMsg(accesstoken, json_data, 0)
+	if '開冷氣' in msg.encode('utf-8'):
+		ret = FoodEventMsg(accesstoken, json_data, 1)
+	if '關冷氣' in msg.encode('utf-8'):
+		ret = FoodEventMsg(accesstoken, json_data, 0)
 
 	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
