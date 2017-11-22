@@ -37,6 +37,10 @@ class MessageType(Enum):
 	location = 6
 	sticker = 7
 
+class ONOFFType(Enum):
+	OFF = 0
+	ON = 1
+
 channeltoken='qYzIzIqCTWz82oZkTnO0A9Ggiz6bNkS1VHIMU/9kCww/M709Ff+PFDObSL+OFvhSQlLpYlTDmxkKgKS2SwbkoZs/tLEgzLlJYY+Wsf1yB6J//rQfZOuv9dLeCpt2fcBg984pT1wLpBT0uNEcmBuAaQdB04t89/1O/w1cDnyilFU='
 
 app = Flask(__name__)
@@ -180,11 +184,31 @@ def LightEventMsg(accesstoken, json_data, status):
 	}]
 	datajson = json.dumps(data)
 	res = requests.post(url, headers = headers, data = datajson)
-	msg = 'OFF'
-	if status == '1':
-		msg = 'ON'
+	msg = ONOFFType.OFF.name
+	if status == ONOFFType.ON.value:
+		msg = ONOFFType.ON.name
 
-	ret = ''.join(['電燈 => ', res.text.encode('utf-8')])
+	ret = ''.join(['電燈 => ', msg])
+
+	return ret
+
+def FoodEventMsg(accesstoken, json_data, status):
+	url = 'http://iot.cht.com.tw/iot/v1/device/4847801952/rawdata'
+	headers = {
+		'Content-Type':'application/json',
+		'CK':'PKM0B5MS0SZFYE5E2M'
+	}
+	data = [{
+		'id':'Sensor01',
+		'value':[status]
+	}]
+	datajson = json.dumps(data)
+	res = requests.post(url, headers = headers, data = datajson)
+	msg = ONOFFType.OFF.name
+	if status == ONOFFType.ON.value:
+		msg = ONOFFType.ON.name
+
+	ret = ''.join(['食物投放設備 => ', msg])
 
 	return ret
 
@@ -196,6 +220,10 @@ def replyMessageTextApi(accesstoken, json_data, msg):
 		ret = LightEventMsg(accesstoken, json_data, '1')
 	if '關燈' in msg.encode('utf-8'):
 		ret = LightEventMsg(accesstoken, json_data, '0')
+	if '開始餵食' in msg.encode('utf-8'):
+		ret = FoodEventMsg(accesstoken, json_data, '1')
+	if '結束餵食' in msg.encode('utf-8'):
+		ret = FoodEventMsg(accesstoken, json_data, '0')
 
 	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
