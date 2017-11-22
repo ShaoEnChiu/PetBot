@@ -174,10 +174,10 @@ def LightEventMsg(accesstoken, json_data, status):
 		'Content-Type':'application/json',
 		'CK':'PKM0B5MS0SZFYE5E2M'
 	}
-	data = [{
+	data = {
 		'id':'Sensor01',
 		'value':[status]
-	}]
+	}
 	res = requests.post(url, headers = headers, data = data)
 	msg = 'OFF'
 	if status == '1':
