@@ -245,9 +245,9 @@ def replyMessageTextApi(accesstoken, json_data, msg):
 	if '結束餵食' in msg.encode('utf-8'):
 		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
 	if '開冷氣' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.ON.value)
+		ret = AirConditionEventMsg(accesstoken, json_data, ONOFFType.ON.value)
 	if '關冷氣' in msg.encode('utf-8'):
-		ret = FoodEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
+		ret = AirConditionEventMsg(accesstoken, json_data, ONOFFType.OFF.value)
 
 	data = genData(accesstoken, [ret])
 	datajson = json.dumps(data)
